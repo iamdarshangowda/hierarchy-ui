@@ -1,12 +1,19 @@
 import React from 'react';
 import Card from './Card';
 import { getColorBasedonRole } from '../../utils/colorHelpers';
+import { useToggleContext } from '../../context/ToggleContext';
 
 const CompanyTree = ({ groupId = 1, ...props }) => {
   const { groupData, employeeList } = props;
   const { groupHead, subGroups, groupMembers, groupName, role } = groupData[groupId];
+  const { setIsModalOpen } = useToggleContext();
 
   const color = getColorBasedonRole(role);
+
+  const handleMember = () => {
+    console.log('click');
+    setIsModalOpen(true);
+  };
 
   return (
     <div
@@ -17,7 +24,12 @@ const CompanyTree = ({ groupId = 1, ...props }) => {
         <h1 className="text-xl font-bold text-gray-100 uppercase drop-shadow-md">
           {groupName}
         </h1>
-        <Card memberId={groupHead} role={role} employeeList={employeeList} />
+        <Card
+          memberId={groupHead}
+          role={role}
+          employeeList={employeeList}
+          handleMember={handleMember}
+        />
         {groupMembers &&
           groupMembers.map((memberId, index) => (
             <Card
@@ -25,6 +37,7 @@ const CompanyTree = ({ groupId = 1, ...props }) => {
               key={index}
               role={'member'}
               employeeList={employeeList}
+              handleMember={handleMember}
             />
           ))}
       </div>

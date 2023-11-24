@@ -1,9 +1,12 @@
 import './App.css';
+import Modal from './components/Modal/Modal';
 import CompanyTree from './components/Tree/CompanyTree';
+import { useToggleContext } from './context/ToggleContext';
 import useHierarchyData from './hooks/useHierarchyData';
 
 function App() {
   const [state] = useHierarchyData();
+  const { isModalOpen, setIsModalOpen } = useToggleContext();
 
   if (!state) {
     return (
@@ -18,6 +21,7 @@ function App() {
   return (
     <main>
       <CompanyTree groupData={groupData} employeeList={employeeList} />
+      <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
     </main>
   );
 }
