@@ -1,9 +1,10 @@
 import './App.css';
+import CompanyTree from './components/Tree/CompanyTree';
 
 function App() {
   return (
     <main>
-      <h1>Hello</h1>
+      <CompanyTree />
     </main>
   );
 }
