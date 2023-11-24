@@ -26,14 +26,16 @@ const Group = ({ groupId = 1 }) => {
       style={{ backgroundColor: color }}
     >
       <div className="flex flex-col items-center gap-5">
-        <h1 className="text-lg font-bold">{groupName}</h1>
+        <h1 className="text-xl font-bold text-gray-100 uppercase drop-shadow-md">
+          {groupName}
+        </h1>
         <Card memberId={groupHead} role={role} />
         {groupMembers &&
           groupMembers.map((memberId, index) => (
             <Card memberId={memberId} key={index} role={'member'} />
           ))}
       </div>
-      <div className="flex gap-5 flex-wrap md:flex-nowrap">
+      <div className="flex gap-5 justify-center flex-wrap lg:flex-nowrap">
         {subGroups &&
           subGroups.map((groupId) => <Group groupId={groupId} key={groupId} />)}
       </div>
