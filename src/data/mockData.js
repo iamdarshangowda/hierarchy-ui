@@ -1,4 +1,4 @@
-export const groupData = {
+export const initialGroupData = {
   1: {
     groupName: 'Company',
     groupHead: 1,
@@ -61,7 +61,7 @@ export const groupData = {
   },
 };
 
-export const employeeList = {
+export const initialEmployeeList = {
   1: {
     name: 'Sam Altman',
     group: 1,

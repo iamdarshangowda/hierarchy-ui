@@ -1,8 +1,7 @@
 import React from 'react';
-import { employeeList } from '../../data/mockData';
 import { capitalizeEachWord, capitalizeFirstLetter } from '../../utils/stringHelper';
 
-const Card = ({ memberId, color, role }) => {
+const Card = ({ memberId, color, role, employeeList }) => {
   const memberData = employeeList[memberId];
   return (
     <div
