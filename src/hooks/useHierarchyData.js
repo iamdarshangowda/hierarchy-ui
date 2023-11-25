@@ -1,13 +1,14 @@
 import { useEffect, useReducer } from 'react';
-import { addInitialState } from '../utils/dataHandlers';
+import { addInitialState, updateEmployeeDetails } from '../utils/dataHandlers';
 
 const dataReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_DATA_FROM_LOCAL_STORAGE':
-      const data = addInitialState(action.payload);
-      return data;
+      return addInitialState(action.payload);
+    case 'UPDATE_EMPLOYEE_DETAILS':
+      return updateEmployeeDetails(state, action.payload);
     default:
-      throw new Error('Unknown action');
+      return state;
   }
 };
 

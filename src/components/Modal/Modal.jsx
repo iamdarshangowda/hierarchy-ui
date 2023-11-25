@@ -2,7 +2,7 @@ import { Dialog } from '@headlessui/react';
 import { useEmployeeContext } from '../../context/EmployeeContext';
 import { useEffect, useRef, useState } from 'react';
 
-const Modal = ({ isOpen, setIsOpen, employeeList }) => {
+const Modal = ({ isOpen, setIsOpen, employeeList, dispatch }) => {
   const { editingMemberId } = useEmployeeContext();
   const [memberData, setMemberData] = useState({
     name: '',
@@ -24,11 +24,19 @@ const Modal = ({ isOpen, setIsOpen, employeeList }) => {
   const handleMemberData = (e) => {
     isInputChangeRef.current = true;
     const { name, value } = e.target;
-    console.log(name, value);
     setMemberData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSaveData = () => {};
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const data = { editingMemberId, memberData };
+    dispatch({
+      type: 'UPDATE_EMPLOYEE_DETAILS',
+      payload: data,
+    });
+
+    setIsOpen(false);
+  };
 
   return (
     <Dialog open={isOpen} onClose={() => {}} className="relative z-50">
@@ -38,7 +46,7 @@ const Modal = ({ isOpen, setIsOpen, employeeList }) => {
           <Dialog.Title className="text-xl font-semibold mb-10">
             Employee Details
           </Dialog.Title>
-          <div className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
             <div className="flex items-center gap-4">
               <label className="w-16">Name:</label>
               <input
@@ -48,6 +56,7 @@ const Modal = ({ isOpen, setIsOpen, employeeList }) => {
                 className="border p-2 rounded-md w-full"
                 value={memberData.name}
                 onChange={handleMemberData}
+                required
               />
             </div>
             <div className="flex items-center gap-4">
@@ -59,6 +68,7 @@ const Modal = ({ isOpen, setIsOpen, employeeList }) => {
                 className="border p-2 rounded-md w-full"
                 value={memberData.email}
                 onChange={handleMemberData}
+                required
               />
             </div>
             <div className="flex items-center gap-4">
@@ -70,24 +80,27 @@ const Modal = ({ isOpen, setIsOpen, employeeList }) => {
                 className="border p-2 rounded-md w-full"
                 value={memberData.phone}
                 onChange={handleMemberData}
+                required
               />
             </div>
-          </div>
-          <div className="flex gap-4 justify-end">
-            <button
-              className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10"
-              onClick={() => setIsOpen(false)}
-            >
-              Close
-            </button>
-            <button
-              className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10 disabled:text-gray-400"
-              onClick={handleSaveData}
-              disabled={!isInputChangeRef.current}
-            >
-              Save
-            </button>
-          </div>
+
+            <div className="flex gap-4 justify-end">
+              <button
+                className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10"
+                type="button"
+                onClick={() => setIsOpen(false)}
+              >
+                Close
+              </button>
+              <button
+                className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10 disabled:text-gray-400"
+                type="submit"
+                disabled={!isInputChangeRef.current}
+              >
+                Save
+              </button>
+            </div>
+          </form>
         </Dialog.Panel>
       </div>
     </Dialog>

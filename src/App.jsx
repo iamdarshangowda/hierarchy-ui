@@ -5,10 +5,10 @@ import { useToggleContext } from './context/ToggleContext';
 import useHierarchyData from './hooks/useHierarchyData';
 
 function App() {
-  const [state] = useHierarchyData();
+  const [hierarchyData, dispatch] = useHierarchyData();
   const { isModalOpen, setIsModalOpen } = useToggleContext();
 
-  if (!state) {
+  if (!hierarchyData) {
     return (
       <h1 className="flex justify-center items-center min-h-screen text-3xl font-semibold">
         Loading...
@@ -16,7 +16,7 @@ function App() {
     );
   }
 
-  const { groupData, employeeList } = state;
+  const { groupData, employeeList } = hierarchyData;
 
   return (
     <main>
@@ -25,6 +25,7 @@ function App() {
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         employeeList={employeeList}
+        dispatch={dispatch}
       />
     </main>
   );

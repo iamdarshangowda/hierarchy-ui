@@ -10,3 +10,15 @@ export const addInitialState = (payload) => {
     };
   }
 };
+
+export const updateEmployeeDetails = (state, employeeData) => {
+  const { employeeList, groupData } = state;
+  const { editingMemberId, memberData } = employeeData;
+
+  const updatedState = {
+    groupData,
+    employeeList: { ...employeeList, [editingMemberId]: memberData },
+  };
+
+  return updatedState;
+};
