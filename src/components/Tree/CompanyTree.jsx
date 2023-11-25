@@ -2,16 +2,18 @@ import React from 'react';
 import Card from './Card';
 import { getColorBasedonRole } from '../../utils/colorHelpers';
 import { useToggleContext } from '../../context/ToggleContext';
+import { useEmployeeContext } from '../../context/EmployeeContext';
 
 const CompanyTree = ({ groupId = 1, ...props }) => {
   const { groupData, employeeList } = props;
   const { groupHead, subGroups, groupMembers, groupName, role } = groupData[groupId];
   const { setIsModalOpen } = useToggleContext();
+  const { setEditingMemberId } = useEmployeeContext();
 
   const color = getColorBasedonRole(role);
 
-  const handleMember = () => {
-    console.log('click');
+  const handleMember = (memberId) => {
+    setEditingMemberId(memberId);
     setIsModalOpen(true);
   };
 

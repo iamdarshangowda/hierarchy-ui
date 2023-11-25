@@ -21,7 +21,11 @@ function App() {
   return (
     <main>
       <CompanyTree groupData={groupData} employeeList={employeeList} />
-      <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <Modal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        employeeList={employeeList}
+      />
     </main>
   );
 }

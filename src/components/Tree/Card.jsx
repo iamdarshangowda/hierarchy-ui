@@ -8,7 +8,10 @@ const Card = ({ memberId, color, role, employeeList, handleMember }) => {
       className="text-md font-semibold border w-full bg-gray-200 shadow-md rounded-md"
       style={{ color }}
     >
-      <button className="flex gap-2 p-4 w-full hover:bg-white" onClick={handleMember}>
+      <button
+        className="flex gap-2 p-4 w-full hover:bg-white"
+        onClick={() => handleMember(memberId)}
+      >
         <p>{capitalizeEachWord(memberData.name)},</p>{' '}
         {role && <span className="font-normal">{capitalizeFirstLetter(role)}</span>}
       </button>
