@@ -1,5 +1,16 @@
 import { initialEmployeeList, initialGroupData } from '../data/mockData';
 
+export const getRoleBasedonTeam = (currentRole) => {
+  switch (currentRole) {
+    case 'ceo':
+      return 'head';
+    case 'head':
+      return 'lead';
+    default:
+      return 'member';
+  }
+};
+
 export const addInitialState = (payload) => {
   if (payload) {
     return JSON.parse(payload);
@@ -36,4 +47,27 @@ export const updateGroupName = (state, updatedGroupData) => {
   };
 
   return updatedState;
+};
+
+export const handleCreateNewTeam = (state, teamData) => {
+  const { employeeList, groupData } = state;
+  const { teamName, reportTo } = teamData;
+
+  // Create new Team
+  const teamHeadRole = groupData[reportTo].role;
+  const newTeamRole = getRoleBasedonTeam(teamHeadRole);
+
+  const newTeam = {
+    groupHead: 0,
+    groupMembers: [0],
+    groupName: teamName,
+    reportTo,
+    role: newTeamRole,
+    subGroups: [],
+  };
+
+  //Add new Team to its Group
+
+  console.log(newTeam);
+  return state;
 };

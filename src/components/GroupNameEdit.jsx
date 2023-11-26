@@ -44,8 +44,8 @@ const GroupNameEdit = ({ groupData, groupId, dispatch }) => {
           <label className="w-16">Group Name:</label>
           <input
             type="text"
-            name="name"
-            id="name"
+            name="groupName"
+            id="groupName"
             className="border p-2 rounded-md w-full"
             value={groupName}
             onChange={handleGroupName}
@@ -54,7 +54,6 @@ const GroupNameEdit = ({ groupData, groupId, dispatch }) => {
         </div>
         <button
           className="bg-gray-200 rounded-sm py-1 px-2 text-xs font-semibold disabled:text-gray-400"
-          type="button"
           disabled={showMessage}
           onClick={handleUpdateGroupName}
         >

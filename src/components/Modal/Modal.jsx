@@ -2,6 +2,7 @@ import { Dialog } from '@headlessui/react';
 import { useEmployeeContext } from '../../context/EmployeeContext';
 import { useEffect, useRef, useState } from 'react';
 import GroupNameEdit from '../GroupNameEdit';
+import AddTeamModal from './AddTeamModal';
 
 const initialValue = {
   name: '',
@@ -19,6 +20,8 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
     groupId: '',
   });
   const isInputChangeRef = useRef(null);
+
+  const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
 
   useEffect(() => {
     const dataFromStore = employeeList[editingMemberId];
@@ -127,8 +130,24 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
               </button>
             </div>
           </form>
+          {isDeptHead.isAuthorised && (
+            <button
+              className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10"
+              type="button"
+              onClick={() => setIsTeamModalOpen(true)}
+            >
+              Add New Team
+            </button>
+          )}
         </Dialog.Panel>
       </div>
+
+      <AddTeamModal
+        isOpen={isTeamModalOpen}
+        setIsOpen={setIsTeamModalOpen}
+        reportTo={isDeptHead.groupId}
+        dispatch={dispatch}
+      />
     </Dialog>
   );
 };
