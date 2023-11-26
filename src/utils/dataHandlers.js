@@ -22,3 +22,18 @@ export const updateEmployeeDetails = (state, employeeData) => {
 
   return updatedState;
 };
+
+export const updateGroupName = (state, updatedGroupData) => {
+  const { employeeList, groupData } = state;
+  const { groupId, updatedName } = updatedGroupData;
+
+  const updatedState = {
+    groupData: {
+      ...groupData,
+      [groupId]: { ...groupData[groupId], groupName: updatedName },
+    },
+    employeeList,
+  };
+
+  return updatedState;
+};

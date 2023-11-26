@@ -24,6 +24,7 @@ function App() {
       <Modal
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
+        groupData={groupData}
         employeeList={employeeList}
         dispatch={dispatch}
       />

@@ -1,20 +1,39 @@
 import { Dialog } from '@headlessui/react';
 import { useEmployeeContext } from '../../context/EmployeeContext';
 import { useEffect, useRef, useState } from 'react';
+import GroupNameEdit from '../GroupNameEdit';
 
-const Modal = ({ isOpen, setIsOpen, employeeList, dispatch }) => {
+const initialValue = {
+  name: '',
+  email: '',
+  phone: '',
+  group: '',
+};
+
+const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
   const { editingMemberId } = useEmployeeContext();
-  const [memberData, setMemberData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    group: '',
+  const [memberData, setMemberData] = useState(initialValue);
+  const [isDeptHead, setIsDeptHead] = useState({
+    isAuthorised: false,
+    groupData: '',
+    groupId: '',
   });
   const isInputChangeRef = useRef(null);
 
   useEffect(() => {
     const dataFromStore = employeeList[editingMemberId];
     setMemberData(dataFromStore);
+
+    const group = groupData[dataFromStore.group];
+    if (group.groupHead === editingMemberId) {
+      setIsDeptHead({
+        isAuthorised: true,
+        groupData: group,
+        groupId: dataFromStore.group,
+      });
+    } else {
+      setIsDeptHead({ isAuthorised: false, groupData: '', groupId: '' });
+    }
 
     return () => {
       isInputChangeRef.current = false;
@@ -46,6 +65,13 @@ const Modal = ({ isOpen, setIsOpen, employeeList, dispatch }) => {
           <Dialog.Title className="text-xl font-semibold mb-10">
             Employee Details
           </Dialog.Title>
+          {isDeptHead.isAuthorised && (
+            <GroupNameEdit
+              groupData={isDeptHead.groupData}
+              dispatch={dispatch}
+              groupId={isDeptHead.groupId}
+            />
+          )}
           <form className="flex flex-col gap-4" onSubmit={handleFormSubmit}>
             <div className="flex items-center gap-4">
               <label className="w-16">Name:</label>

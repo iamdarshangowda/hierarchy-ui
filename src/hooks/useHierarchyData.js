@@ -1,5 +1,9 @@
 import { useEffect, useReducer } from 'react';
-import { addInitialState, updateEmployeeDetails } from '../utils/dataHandlers';
+import {
+  addInitialState,
+  updateEmployeeDetails,
+  updateGroupName,
+} from '../utils/dataHandlers';
 
 const dataReducer = (state, action) => {
   switch (action.type) {
@@ -7,6 +11,8 @@ const dataReducer = (state, action) => {
       return addInitialState(action.payload);
     case 'UPDATE_EMPLOYEE_DETAILS':
       return updateEmployeeDetails(state, action.payload);
+    case 'UPDATE_GROUP_NAME':
+      return updateGroupName(state, action.payload);
     default:
       return state;
   }
