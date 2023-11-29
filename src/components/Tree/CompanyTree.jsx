@@ -48,7 +48,7 @@ const CompanyTree = ({ groupId = 1, ...props }) => {
               <span key={index}></span>
             )
           )}
-        {role === 'lead' ? (
+        {groupHead === 0 || role === 'lead' ? (
           <button
             className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold w-full"
             type="button"
@@ -58,7 +58,7 @@ const CompanyTree = ({ groupId = 1, ...props }) => {
           </button>
         ) : null}
       </div>
-      <div className="flex gap-5 justify-center flex-wrap lg:flex-nowrap">
+      <div className="flex gap-5 justify-center flex-wrap">
         {subGroups &&
           subGroups.map((groupId) => (
             <CompanyTree groupId={groupId} key={groupId} {...props} />
