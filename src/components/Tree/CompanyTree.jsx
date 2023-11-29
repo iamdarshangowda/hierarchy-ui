@@ -7,7 +7,7 @@ import { useEmployeeContext } from '../../context/EmployeeContext';
 const CompanyTree = ({ groupId = 1, ...props }) => {
   const { groupData, employeeList } = props;
   const { groupHead, subGroups, groupMembers, groupName, role } = groupData[groupId];
-  const { setIsModalOpen } = useToggleContext();
+  const { setIsModalOpen, setMemberModal } = useToggleContext();
   const { setEditingMemberId } = useEmployeeContext();
 
   const color = getColorBasedonRole(role);
@@ -26,22 +26,37 @@ const CompanyTree = ({ groupId = 1, ...props }) => {
         <h1 className="text-xl font-bold text-gray-100 uppercase drop-shadow-md">
           {groupName}
         </h1>
-        <Card
-          memberId={groupHead}
-          role={role}
-          employeeList={employeeList}
-          handleMember={handleMember}
-        />
+        {groupHead !== 0 ? (
+          <Card
+            memberId={groupHead}
+            role={role}
+            employeeList={employeeList}
+            handleMember={handleMember}
+          />
+        ) : null}
         {groupMembers &&
-          groupMembers.map((memberId, index) => (
-            <Card
-              memberId={memberId}
-              key={index}
-              role={'member'}
-              employeeList={employeeList}
-              handleMember={handleMember}
-            />
-          ))}
+          groupMembers.map((memberId, index) =>
+            memberId !== 0 ? (
+              <Card
+                memberId={memberId}
+                key={index}
+                role={'member'}
+                employeeList={employeeList}
+                handleMember={handleMember}
+              />
+            ) : (
+              <span key={index}></span>
+            )
+          )}
+        {role === 'lead' ? (
+          <button
+            className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold w-full"
+            type="button"
+            onClick={() => setMemberModal({ addToGroup: groupId, isOpen: true })}
+          >
+            Add Team Members
+          </button>
+        ) : null}
       </div>
       <div className="flex gap-5 justify-center flex-wrap lg:flex-nowrap">
         {subGroups &&

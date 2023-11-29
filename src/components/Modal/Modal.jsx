@@ -15,7 +15,8 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
   const { editingMemberId } = useEmployeeContext();
   const [memberData, setMemberData] = useState(initialValue);
   const [isDeptHead, setIsDeptHead] = useState({
-    isAuthorised: false,
+    isAddNewTeam: false,
+    isEditGroupName: false,
     groupData: '',
     groupId: '',
   });
@@ -28,14 +29,27 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
     setMemberData(dataFromStore);
 
     const group = groupData[dataFromStore.group];
-    if (group.groupHead === editingMemberId) {
+    if (group.groupHead === editingMemberId && group.role !== 'lead') {
       setIsDeptHead({
-        isAuthorised: true,
+        isAddNewTeam: true,
+        isEditGroupName: true,
+        groupData: group,
+        groupId: dataFromStore.group,
+      });
+    } else if (group.groupHead === editingMemberId) {
+      setIsDeptHead({
+        isAddNewTeam: false,
+        isEditGroupName: true,
         groupData: group,
         groupId: dataFromStore.group,
       });
     } else {
-      setIsDeptHead({ isAuthorised: false, groupData: '', groupId: '' });
+      setIsDeptHead({
+        isAddNewTeam: false,
+        isEditGroupName: false,
+        groupData: '',
+        groupId: '',
+      });
     }
 
     return () => {
@@ -68,7 +82,7 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
           <Dialog.Title className="text-xl font-semibold mb-10">
             Employee Details
           </Dialog.Title>
-          {isDeptHead.isAuthorised && (
+          {isDeptHead.isEditGroupName && (
             <GroupNameEdit
               groupData={isDeptHead.groupData}
               dispatch={dispatch}
@@ -130,7 +144,7 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
               </button>
             </div>
           </form>
-          {isDeptHead.isAuthorised && (
+          {isDeptHead.isAddNewTeam && (
             <button
               className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10"
               type="button"

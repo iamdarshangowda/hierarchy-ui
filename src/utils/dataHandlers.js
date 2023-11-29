@@ -1,6 +1,6 @@
 import { initialEmployeeList, initialGroupData } from '../data/mockData';
 
-export const getRoleBasedonTeam = (currentRole) => {
+export const getRoleBasedOnTeam = (currentRole) => {
   switch (currentRole) {
     case 'ceo':
       return 'head';
@@ -55,19 +55,82 @@ export const handleCreateNewTeam = (state, teamData) => {
 
   // Create new Team
   const teamHeadRole = groupData[reportTo].role;
-  const newTeamRole = getRoleBasedonTeam(teamHeadRole);
+  const newTeamRole = getRoleBasedOnTeam(teamHeadRole);
 
   const newTeam = {
     groupHead: 0,
-    groupMembers: [0],
+    groupMembers: [],
     groupName: teamName,
     reportTo,
     role: newTeamRole,
     subGroups: [],
   };
 
-  //Add new Team to its Group
+  // Get key to insert
+  let keyToInsert = 2;
+  while (groupData[keyToInsert]) {
+    keyToInsert++;
+  }
 
-  console.log(newTeam);
-  return state;
+  //Add new Team to its Group
+  const updatedGroup = {
+    ...groupData,
+    [reportTo]: {
+      ...groupData[reportTo],
+      subGroups: [...groupData[reportTo].subGroups, keyToInsert],
+    },
+    [keyToInsert]: newTeam,
+  };
+
+  const updatedState = {
+    employeeList,
+    groupData: updatedGroup,
+  };
+
+  console.log(updatedState);
+  return updatedState;
+};
+
+export const addMemberToGroup = (state, memberData) => {
+  const { employeeList, groupData } = state;
+
+  let keyToInsertMember = 2;
+  while (employeeList[keyToInsertMember]) {
+    keyToInsertMember++;
+  }
+
+  // Update the employee list
+  const updatedEmployeeList = {
+    ...employeeList,
+    [keyToInsertMember]: memberData,
+  };
+
+  // Update this member to the group
+  const group = groupData[memberData.group];
+  let updatedMemberGroup = {};
+
+  // Check if group has a team lead
+  if (group.groupHead) {
+    updatedMemberGroup = {
+      ...group,
+      groupMembers: [...group.groupMembers, keyToInsertMember],
+    };
+  } else {
+    updatedMemberGroup = {
+      ...group,
+      groupHead: keyToInsertMember,
+    };
+  }
+
+  const updatedGroupData = {
+    ...groupData,
+    [memberData.group]: updatedMemberGroup,
+  };
+
+  const updatedState = {
+    employeeList: updatedEmployeeList,
+    groupData: updatedGroupData,
+  };
+
+  return updatedState;
 };

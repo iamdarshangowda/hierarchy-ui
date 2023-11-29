@@ -19,6 +19,8 @@ const AddTeamModal = ({ isOpen, setIsOpen, reportTo, dispatch }) => {
       type: 'CREATE_NEW_TEAM',
       payload: data,
     });
+
+    setIsOpen(false);
   };
 
   return (

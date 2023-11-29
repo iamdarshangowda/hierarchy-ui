@@ -1,4 +1,5 @@
 import './App.css';
+import AddTeamMemberModal from './components/Modal/AddMemberModal';
 import Modal from './components/Modal/Modal';
 import CompanyTree from './components/Tree/CompanyTree';
 import { useToggleContext } from './context/ToggleContext';
@@ -6,7 +7,7 @@ import useHierarchyData from './hooks/useHierarchyData';
 
 function App() {
   const [hierarchyData, dispatch] = useHierarchyData();
-  const { isModalOpen, setIsModalOpen } = useToggleContext();
+  const { isModalOpen, setIsModalOpen, memberModal, setMemberModal } = useToggleContext();
 
   if (!hierarchyData) {
     return (
@@ -26,6 +27,12 @@ function App() {
         setIsOpen={setIsModalOpen}
         groupData={groupData}
         employeeList={employeeList}
+        dispatch={dispatch}
+      />
+      <AddTeamMemberModal
+        isOpen={memberModal.isOpen}
+        setIsOpen={setMemberModal}
+        addToGroup={memberModal.addToGroup}
         dispatch={dispatch}
       />
     </main>
