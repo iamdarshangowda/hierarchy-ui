@@ -3,6 +3,7 @@ import { useEmployeeContext } from '../../context/EmployeeContext';
 import { useEffect, useRef, useState } from 'react';
 import GroupNameEdit from '../GroupNameEdit';
 import AddTeamModal from './AddTeamModal';
+import MoveMemberModal from './MoveMemberModal';
 
 const initialValue = {
   name: '',
@@ -14,6 +15,7 @@ const initialValue = {
 const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
   const { editingMemberId } = useEmployeeContext();
   const [memberData, setMemberData] = useState(initialValue);
+  const [memberGroup, setMemberGroup] = useState({});
   const [isDeptHead, setIsDeptHead] = useState({
     isAddNewTeam: false,
     isEditGroupName: false,
@@ -23,12 +25,15 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
   const isInputChangeRef = useRef(null);
 
   const [isTeamModalOpen, setIsTeamModalOpen] = useState(false);
+  const [isMoveMemberModalOpen, setIsMoveMemberModalOpen] = useState(false);
 
   useEffect(() => {
     const dataFromStore = employeeList[editingMemberId];
     setMemberData(dataFromStore);
 
     const group = groupData[dataFromStore.group];
+
+    setMemberGroup(group);
     if (group.groupHead === editingMemberId && group.role !== 'lead') {
       setIsDeptHead({
         isAddNewTeam: true,
@@ -68,6 +73,16 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
     const data = { editingMemberId, memberData };
     dispatch({
       type: 'UPDATE_EMPLOYEE_DETAILS',
+      payload: data,
+    });
+
+    setIsOpen(false);
+  };
+
+  const handleDeleteMember = () => {
+    const data = { editingMemberId, memberGroup, membersGroupId: memberData.group };
+    dispatch({
+      type: 'DELETE_MEMBER',
       payload: data,
     });
 
@@ -144,6 +159,25 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
               </button>
             </div>
           </form>
+          {memberGroup.groupMembers &&
+            memberGroup.groupMembers.includes(editingMemberId) && (
+              <div className="flex gap-2 flex-wrap mt-10">
+                <button
+                  className="bg-red-200 rounded-sm py-2 px-4 text-md font-semibold w-full"
+                  type="button"
+                  onClick={handleDeleteMember}
+                >
+                  Delete Member
+                </button>
+                <button
+                  className="bg-green-200 rounded-sm py-2 px-4 text-md font-semibold w-full"
+                  type="button"
+                  onClick={() => setIsMoveMemberModalOpen(true)}
+                >
+                  Move Member
+                </button>
+              </div>
+            )}
           {isDeptHead.isAddNewTeam && (
             <button
               className="bg-gray-200 rounded-sm py-2 px-4 text-md font-semibold mt-10"
@@ -156,6 +190,13 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
         </Dialog.Panel>
       </div>
 
+      <MoveMemberModal
+        isOpen={isMoveMemberModalOpen}
+        setIsOpen={setIsMoveMemberModalOpen}
+        memberData={memberData}
+        groupData={groupData}
+        dispatch={dispatch}
+      />
       <AddTeamModal
         isOpen={isTeamModalOpen}
         setIsOpen={setIsTeamModalOpen}

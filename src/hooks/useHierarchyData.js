@@ -2,6 +2,7 @@ import { useEffect, useReducer } from 'react';
 import {
   addInitialState,
   addMemberToGroup,
+  deleteMember,
   handleCreateNewTeam,
   updateEmployeeDetails,
   updateGroupName,
@@ -19,6 +20,8 @@ const dataReducer = (state, action) => {
       return handleCreateNewTeam(state, action.payload);
     case 'ADD_MEMBER_TO_GROUP':
       return addMemberToGroup(state, action.payload);
+    case 'DELETE_MEMBER':
+      return deleteMember(state, action.payload);
     default:
       return state;
   }

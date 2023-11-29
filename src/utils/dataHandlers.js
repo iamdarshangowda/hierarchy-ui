@@ -134,3 +134,25 @@ export const addMemberToGroup = (state, memberData) => {
 
   return updatedState;
 };
+
+export const deleteMember = (state, memberToDelete) => {
+  const { employeeList, groupData } = state;
+  const { editingMemberId, memberGroup, membersGroupId } = memberToDelete;
+  console.log(editingMemberId, memberGroup);
+
+  delete employeeList[editingMemberId];
+
+  const updatedGroup = {
+    ...memberGroup,
+    groupMembers: memberGroup.groupMembers.filter(
+      (memberId) => memberId !== editingMemberId
+    ),
+  };
+
+  const updatedState = {
+    employeeList,
+    groupData: { ...groupData, [membersGroupId]: updatedGroup },
+  };
+
+  return updatedState;
+};
