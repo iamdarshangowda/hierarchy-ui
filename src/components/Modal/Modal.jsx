@@ -190,19 +190,25 @@ const Modal = ({ isOpen, setIsOpen, groupData, employeeList, dispatch }) => {
         </Dialog.Panel>
       </div>
 
-      <MoveMemberModal
-        isOpen={isMoveMemberModalOpen}
-        setIsOpen={setIsMoveMemberModalOpen}
-        memberData={memberData}
-        groupData={groupData}
-        dispatch={dispatch}
-      />
-      <AddTeamModal
-        isOpen={isTeamModalOpen}
-        setIsOpen={setIsTeamModalOpen}
-        reportTo={isDeptHead.groupId}
-        dispatch={dispatch}
-      />
+      {isMoveMemberModalOpen && (
+        <MoveMemberModal
+          isOpen={isMoveMemberModalOpen}
+          setIsOpen={setIsMoveMemberModalOpen}
+          memberData={memberData}
+          editingMemberId={editingMemberId}
+          groupData={groupData}
+          dispatch={dispatch}
+          isMainModalOpen={setIsOpen}
+        />
+      )}
+      {isTeamModalOpen && (
+        <AddTeamModal
+          isOpen={isTeamModalOpen}
+          setIsOpen={setIsTeamModalOpen}
+          reportTo={isDeptHead.groupId}
+          dispatch={dispatch}
+        />
+      )}
     </Dialog>
   );
 };

@@ -49,7 +49,7 @@ export const updateGroupName = (state, updatedGroupData) => {
   return updatedState;
 };
 
-export const handleCreateNewTeam = (state, teamData) => {
+export const createNewTeam = (state, teamData) => {
   const { employeeList, groupData } = state;
   const { teamName, reportTo } = teamData;
 
@@ -87,7 +87,6 @@ export const handleCreateNewTeam = (state, teamData) => {
     groupData: updatedGroup,
   };
 
-  console.log(updatedState);
   return updatedState;
 };
 
@@ -138,7 +137,6 @@ export const addMemberToGroup = (state, memberData) => {
 export const deleteMember = (state, memberToDelete) => {
   const { employeeList, groupData } = state;
   const { editingMemberId, memberGroup, membersGroupId } = memberToDelete;
-  console.log(editingMemberId, memberGroup);
 
   delete employeeList[editingMemberId];
 
@@ -152,6 +150,44 @@ export const deleteMember = (state, memberToDelete) => {
   const updatedState = {
     employeeList,
     groupData: { ...groupData, [membersGroupId]: updatedGroup },
+  };
+
+  return updatedState;
+};
+
+export const moveMember = (state, memberDetails) => {
+  const { employeeList, groupData } = state;
+  const { memberId, groupToMove, currentGroup } = memberDetails;
+
+  const updatedEmployee = {
+    ...employeeList[memberId],
+    group: groupToMove,
+  };
+
+  const updatedEmployeeList = {
+    ...employeeList,
+    [memberId]: updatedEmployee,
+  };
+
+  const updatedCurrentMemberGroup = {
+    ...groupData[currentGroup],
+    groupMembers: groupData[currentGroup].groupMembers.filter((id) => id !== memberId),
+  };
+
+  const updatedNewMemberGroup = {
+    ...groupData[groupToMove],
+    groupMembers: [...groupData[groupToMove].groupMembers, memberId],
+  };
+
+  const updatedGroup = {
+    ...groupData,
+    [currentGroup]: updatedCurrentMemberGroup,
+    [groupToMove]: updatedNewMemberGroup,
+  };
+
+  const updatedState = {
+    employeeList: updatedEmployeeList,
+    groupData: updatedGroup,
   };
 
   return updatedState;

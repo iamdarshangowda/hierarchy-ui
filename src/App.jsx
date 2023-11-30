@@ -22,19 +22,23 @@ function App() {
   return (
     <main>
       <CompanyTree groupData={groupData} employeeList={employeeList} />
-      <Modal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        groupData={groupData}
-        employeeList={employeeList}
-        dispatch={dispatch}
-      />
-      <AddTeamMemberModal
-        isOpen={memberModal.isOpen}
-        setIsOpen={setMemberModal}
-        addToGroup={memberModal.addToGroup}
-        dispatch={dispatch}
-      />
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          groupData={groupData}
+          employeeList={employeeList}
+          dispatch={dispatch}
+        />
+      )}
+      {memberModal.isOpen && (
+        <AddTeamMemberModal
+          isOpen={memberModal.isOpen}
+          setIsOpen={setMemberModal}
+          addToGroup={memberModal.addToGroup}
+          dispatch={dispatch}
+        />
+      )}
     </main>
   );
 }

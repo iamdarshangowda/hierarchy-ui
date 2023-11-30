@@ -13,8 +13,10 @@ const CompanyTree = ({ groupId = 1, ...props }) => {
   const color = getColorBasedonRole(role);
 
   const handleMember = (memberId) => {
-    setEditingMemberId(memberId);
-    setIsModalOpen(true);
+    if (memberId) {
+      setEditingMemberId(memberId);
+      setIsModalOpen(true);
+    }
   };
 
   return (

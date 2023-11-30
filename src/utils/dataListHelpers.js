@@ -10,6 +10,16 @@ export const getGroupLists = (groupData) => {
   return groupList;
 };
 
-export const getFilteredGroupList = (groupList, groupToFilter) => {
-  return groupList.filter((group, index) => index !== groupToFilter);
+export const getFilteredGroupList = (groupList, groupsToFilter) => {
+  let filteredArr = [];
+  groupList.forEach((group, index) => {
+    if (!groupsToFilter.includes(index)) {
+      filteredArr.push({
+        groupName: group,
+        groupId: index,
+      });
+    }
+  });
+
+  return filteredArr;
 };

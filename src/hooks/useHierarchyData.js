@@ -2,8 +2,9 @@ import { useEffect, useReducer } from 'react';
 import {
   addInitialState,
   addMemberToGroup,
+  createNewTeam,
   deleteMember,
-  handleCreateNewTeam,
+  moveMember,
   updateEmployeeDetails,
   updateGroupName,
 } from '../utils/dataHandlers';
@@ -17,9 +18,11 @@ const dataReducer = (state, action) => {
     case 'UPDATE_GROUP_NAME':
       return updateGroupName(state, action.payload);
     case 'CREATE_NEW_TEAM':
-      return handleCreateNewTeam(state, action.payload);
+      return createNewTeam(state, action.payload);
     case 'ADD_MEMBER_TO_GROUP':
       return addMemberToGroup(state, action.payload);
+    case 'MOVE_MEMBER':
+      return moveMember(state, action.payload);
     case 'DELETE_MEMBER':
       return deleteMember(state, action.payload);
     default:

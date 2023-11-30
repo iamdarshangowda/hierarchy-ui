@@ -2,29 +2,54 @@ import { Dialog } from '@headlessui/react';
 import { useEffect, useState } from 'react';
 import { getFilteredGroupList, getGroupLists } from '../../utils/dataListHelpers';
 
-const MoveMemberModal = ({ isOpen, setIsOpen, memberData, dispatch, groupData }) => {
-  const [teamName, setTeamName] = useState('');
+const MoveMemberModal = ({
+  isOpen,
+  setIsOpen,
+  memberData,
+  dispatch,
+  groupData,
+  editingMemberId,
+  isMainModalOpen,
+}) => {
+  const [groupToMove, setGroupToMove] = useState('');
   const [groupList, setGroupList] = useState([]);
 
   const handleChangeName = (e) => {
     const { value } = e.target;
-    setTeamName(value);
+    setGroupToMove(Number(value));
   };
 
-  const handleCreateTeam = (e) => {
+  const handleMoveMember = (e) => {
     e.preventDefault();
+    const data = {
+      memberId: editingMemberId,
+      groupToMove,
+      currentGroup: memberData.group,
+    };
 
-    // dispatch({
-    //   type: 'CREATE_NEW_TEAM',
-    //   payload: data,
-    // });
+    dispatch({
+      type: 'MOVE_MEMBER',
+      payload: data,
+    });
 
     setIsOpen(false);
+    isMainModalOpen(false);
   };
 
   useEffect(() => {
     const lists = getGroupLists(groupData);
-    const filteredList = getFilteredGroupList(lists, memberData.group);
+
+    // Member from HR cant be moved to Design
+    const teamReportTo = groupData[memberData.group].reportTo;
+
+    const isMemberFromHRGroup = groupData[teamReportTo].groupName === 'HR';
+    let groupsIDToFilter = [memberData.group];
+    if (isMemberFromHRGroup) {
+      const DESIGN_GROUP = 3;
+      groupsIDToFilter.push(...groupData[DESIGN_GROUP].subGroups);
+    }
+
+    const filteredList = getFilteredGroupList(lists, groupsIDToFilter);
     setGroupList(filteredList);
   }, [groupData, isOpen]);
 
@@ -36,13 +61,21 @@ const MoveMemberModal = ({ isOpen, setIsOpen, memberData, dispatch, groupData })
           <Dialog.Title className="text-xl font-semibold mb-10">
             Move Member To
           </Dialog.Title>
-          <form className="flex flex-col gap-4" onSubmit={handleCreateTeam}>
+          <form className="flex flex-col gap-4" onSubmit={handleMoveMember}>
             <div className="flex items-center gap-4">
               <label className="w-16">Group:</label>
-              <select name="group" id="group" className="py-2 w-full">
+              <select
+                name="group"
+                id="group"
+                className="py-2 w-full"
+                onChange={handleChangeName}
+              >
+                <option value={0} disabled selected={!groupToMove}>
+                  Select Team
+                </option>
                 {groupList.map((group, index) => (
-                  <option value={index} key={index}>
-                    {group}
+                  <option value={group.groupId} key={index}>
+                    {group.groupName}
                   </option>
                 ))}
               </select>
@@ -57,8 +90,9 @@ const MoveMemberModal = ({ isOpen, setIsOpen, memberData, dispatch, groupData })
                 Close
               </button>
               <button
-                className="bg-green-400 rounded-sm py-2 px-4 text-md font-semibold mt-10 disabled:text-gray-400"
+                className="bg-green-400 rounded-sm py-2 px-4 text-md font-semibold mt-10 disabled:text-gray-200 disabled:bg-gray-400"
                 type="submit"
+                disabled={!groupToMove}
               >
                 Move
               </button>
