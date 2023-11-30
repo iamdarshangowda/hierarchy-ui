@@ -1,6 +1,7 @@
 import './App.css';
 import AddTeamMemberModal from './components/Modal/AddMemberModal';
 import Modal from './components/Modal/Modal';
+import SearchBar from './components/SearchBar';
 import CompanyTree from './components/Tree/CompanyTree';
 import { useToggleContext } from './context/ToggleContext';
 import useHierarchyData from './hooks/useHierarchyData';
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <main>
+      <SearchBar employeeList={employeeList} />
       <CompanyTree groupData={groupData} employeeList={employeeList} />
       {isModalOpen && (
         <Modal
